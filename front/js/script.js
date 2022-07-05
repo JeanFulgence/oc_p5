@@ -11,7 +11,7 @@ fetch("http://localhost:3000/api/products")
       console.log("Erreur 404 sur ressource API:" + error) //Affichage de l'erreur dans la console
 });
 
-// Fonction d'affichage des produits dans l'index
+// Fonction d'affichage des produits de l'API
 const kanaps = (index) => {
   // Variable de la zone d'article
   let articleZone = document.querySelector("#items");
