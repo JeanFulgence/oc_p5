@@ -3,7 +3,7 @@ fetch("http://localhost:3000/api/products")
 .then(response => response.json())
 .then((objectProducts) => {
       console.table(objectProducts); // Création d'un tableau avec les produits dans la console
-      kanaps(objectProducts); // Appel de la fonction d'affichage des produits
+      displayKanaps(objectProducts); // Appel de la fonction d'affichage des produits
 })
 // Création d'un message d'erreur en cas d'échec de la récupération
 .catch((error) => {
@@ -12,9 +12,9 @@ fetch("http://localhost:3000/api/products")
 });
 
 // Fonction d'affichage des produits de l'API
-const kanaps = (index) => {
+let displayKanaps = (index) => {
   // Variable de la zone d'article
-  let articleZone = document.querySelector("#items");
+  let articleZone = document.getElementById("items");
   // Boucle pour chaque article dans l'index
   for (let article of index) {
     // Création de la zone d'article dans l'index, avec un lien vers le produit (chemin du produit associé à son id)
