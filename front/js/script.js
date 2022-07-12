@@ -1,9 +1,9 @@
 // Récupération du contenu de l'API
 fetch("http://localhost:3000/api/products")
 .then(response => response.json())
-.then((objectProducts) => {
-      console.table(objectProducts); // Création d'un tableau avec les produits dans la console
-      displayKanaps(objectProducts); // Appel de la fonction d'affichage des produits
+.then((products) => {
+      console.table(products); // Création d'un tableau avec les produits dans la console
+      displayKanaps(products); // Appel de la fonction d'affichage des produits
 })
 // Création d'un message d'erreur en cas d'échec de la récupération
 .catch((error) => {
