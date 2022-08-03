@@ -2,7 +2,7 @@
 let idKanap = (new URL(document.location)).searchParams.get("_id");
 console.log(idKanap);
 
-// Récupération du produit dont on a besoin
+// Récupération du produit dont on a besoin via l'URL + l'id du produit
 fetch("http://localhost:3000/api/products/" + idKanap)
 
 // Renvoi des informations du produit
@@ -14,33 +14,33 @@ fetch("http://localhost:3000/api/products/" + idKanap)
 // Création d'un message d'erreur en cas d'échec de la récupération
 .catch(error => {
 
-      //Insertion d'un titre "Erreur 404"
-      document.querySelector(".item").innerHTML = "<h1>Erreur 404</h1>"; 
-      
-      //Affichage de l'erreur dans la console
-      console.log("Erreur 404 sur ressource API:" + error)
+            //Insertion d'un titre "Erreur 404"
+            document.querySelector(".item").innerHTML = "<h1>Erreur 404</h1>"; 
+            
+            //Affichage de l'erreur dans la console
+            console.log("Erreur 404 sur ressource API:" + error)
 }));
 
 // Fonction d'affichage du produit
 function displayProduct(article) {
 
-      // Récupère la classe "item__img" et lui ajoute une image avec l'url
+      // Récupération la classe "item__img" et lui ajoute une image avec l'url
       const item__img = document.getElementsByClassName("item__img");
       item__img[0].innerHTML = "<img src=" + article.imageUrl + " alt=" + article.altTxt + "></img>";
 
-      // Récupère l'élément avec l'id title et lui a ajoute le nom associé
+      // Récupération l'élément avec l'id title et lui a ajoute le nom associé
       const title = document.getElementById('title');
       title.innerText = article.name;
 
-      // Récupère l'élément avec l'id price et lui ajoute le prix associé
+      // Récupération l'élément avec l'id price et lui ajoute le prix associé
       const price = document.getElementById('price');
       price.innerText = article.price;
   
-      // Récupère l'élément avec l'id description et lui ajoute la description associée
+      // Récupération l'élément avec l'id description et lui ajoute la description associée
       const description = document.getElementById('description');
       description.innerText = article.description;
 
-      // Récupère l'élément avec l'id colors et lui ajoute la/les couleur/s associée/s
+      // Récupération l'élément avec l'id colors et lui ajoute les couleurs associées
       for (let colors of article.colors) {
           let articleColors = document.createElement("option");
           document.querySelector("#colors").appendChild(articleColors);
@@ -88,20 +88,15 @@ function addToCart(article) {
             let selectedQuantity = document.getElementById("quantity");
             article.quantity = +selectedQuantity.value;
 
-            // Déclaration d'un array "itemInCart", qui définit les valeurs d'un article ajouté au panier
+            // Déclaration d'un objet "itemInCart", qui définit les valeurs d'un article ajouté au panier
             let itemInCart = {
-            'id' : idKanap,
-            'name' : article.name,
-            'price' : article.price, 
-            'imageUrl' : article.imageUrl, 
-            'description' : article.description, 
-            'altTxt' : article.altTxt, 
-            'color' : selectedColor.value,
-            'quantity' : parseInt(selectedQuantity.value, 10)
-            }
+                  'id' : idKanap,
+                  'color' : selectedColor.value,
+                  'quantity' : parseInt(selectedQuantity.value)
+            };
 
             // Déclaration d'une variable cherchant un produit dans le panier dont l'id est identique au produit que l'on veut ajouter
-            let foundItem = cart.find(fi => fi.id == article._id && fi.color == selectedColor.value)
+            let foundItem = cart.find(fi => fi.id == article._id && fi.color == selectedColor.value);
 
             // Affichage d'un message si les valeur de couleur et de quantité ne sont pas définies correctement
             if (selectedQuantity.value <= 0 || selectedQuantity.value > 100 || selectedColor.value === "") {
@@ -123,7 +118,7 @@ function addToCart(article) {
                   foundItem.quantity = totalQuantity;
                   
                   // Sauvegarde du panier
-                  saveCart(cart)
+                  saveCart(cart);
                   
                   // Affichage du panier dans la console
                   console.log(cart);
@@ -138,7 +133,7 @@ function addToCart(article) {
                   saveCart(cart);
 
                   // Affichage d'un message de confirmation de l'ajout d'un article au panier
-                  alert(article.name + " a été ajouté à votre panier!")
+                  alert(article.name + " a été ajouté à votre panier!");
 
                   // Affichage du panier dans la console
                   console.log(cart);
