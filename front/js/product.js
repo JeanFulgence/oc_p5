@@ -15,7 +15,7 @@ fetch("http://localhost:3000/api/products/" + idKanap)
 .catch(error => {
 
             //Insertion d'un titre "Erreur 404"
-            document.querySelector(".item").innerHTML = "<h1>Erreur 404</h1>"; 
+            document.getElementById("item").innerHTML = "<h1>Erreur 404</h1>"; 
             
             //Affichage de l'erreur dans la console
             console.log("Erreur 404 sur ressource API:" + error)
@@ -114,7 +114,7 @@ function addToCart(article) {
                   alert("Attention, vous avez déjà ajouté " + article.name + " à votre panier.");
 
                   // Ajout de la quantité sélectionnée à la quantité existante
-                  let totalQuantity = itemInCart.quantity + foundItem.quantity;
+                  let totalQuantity = parseInt(itemInCart.quantity) + parseInt(foundItem.quantity);
                   foundItem.quantity = totalQuantity;
                   
                   // Sauvegarde du panier

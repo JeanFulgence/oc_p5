@@ -11,7 +11,7 @@ async function displayCart(index) {
      if (!itemInCart || itemInCart.length == 0) {
 
           // Insertion d'un message indiquant que le panier est vide
-          document.getElementById("cartAndFormContainer").innerHTML = "<h1>Votre panier est vide.</h1>"
+          document.getElementById("cartAndFormContainer").innerHTML = "<h2>Votre panier est vide.<br/>Pourquoi ne pas jeter un oeil <a href='./index.html'>à nos produits?</a></h2>"
 
           // Affichage du panier existant
      } else {
@@ -52,15 +52,17 @@ async function displayCart(index) {
                               <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
                          </div>
                          <div class="cart__item__content__settings__delete">
-                              <p id="deleteItem" class="deleteItem">Supprimer</p>
+                              <p class="deleteItem">Supprimer</p>
                          </div>
                          </div>
                     </div>
                     </article>`;
-                    // Appel de la fonction d'affichage des totaux
+
+                    // Appel des fonctions de total et de modification du panier
                     cartTotal(quantity, price);
                     removeFromCart();
-               }));
+                    adjustQuantity();
+               }))
           }
      }
 }
@@ -108,38 +110,84 @@ function cartTotal(quantity, price) {
 
 // Fonction de suppression d'un produit
 function removeFromCart() {
-     console.log("Fonction supprimer en attente");
 
-     // Définition du bouton "supprimer" et ajout d'une écoute dessus
-     let deleteBtn = document.getElementById("deleteItem");
-     deleteBtn.addEventListener("click", () => {
-          if (window.confirm("Voulez-vous retirer ce produit de votre panier?")) {
-               let id = itemInCart.dataset.color;
-               let color = itemInCart.dataset.color;
+     // Définition du bouton "supprimer"
+     let deleteBtn = document.querySelectorAll(".deleteItem");
 
-               // Conserve les produits ne correspondant pas à l'id et la couleur passées dans la méthode filter()
-               itemInCart = itemInCart.filter(it => it.id != itemInCart.id && it.color != itemInCart.color);
+          // Boucle itérant les occurences du bouton "supprimer"
+          for (let i = 0; i < deleteBtn.length; i++) {
+
+               // Ajout d'une écoute sur le bouton "supprimer"
+               deleteBtn[i].addEventListener("click", () => {
+                    if (window.confirm("Voulez-vous retirer ce produit de votre panier?")) {
+                    
+                    // Récupération de l'id du produit sur lequel on clique via la propriété dataset associée à la méthode
+                    let $id = deleteBtn[i].closest("article").dataset.id;
+                    
+                    // Récupération de la couleur du produit sur lequel on clique via la propriété dataset associée à la méthode
+                    let $color = deleteBtn[i].closest("article").dataset.color;
+
+                    // Conserve les produits ne correspondant pas à l'id et la couleur passées dans la méthode filter
+                    itemInCart = itemInCart.filter(it => it.id != $id || it.color != $color);
+
+                    // Sauvegarde du panier modifié
+                    localStorage.setItem("cart", JSON.stringify(itemInCart));
+
+                    // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
+                    location.reload();
+               }
+          })
+     }
+}
+
+// Fonction d'ajustement de la quantité d'un produit
+function adjustQuantity() {
+
+     // Définition du/des champs "Qté"
+     let adjustQty = document.querySelectorAll('.itemQuantity')
+
+     // Boucle itérant les occurences du champ "Qté"
+     for (let j = 0; j < adjustQty.length; j++) {
+
+          // Ajout d'une écoute sur le champ
+          adjustQty[j].addEventListener("change", () => {
+
+               // Récupération de l'id et la couleur du produit via la propriété dataset associée à la méthode closest
+               let $id = adjustQty[j].closest("article").dataset.id;
+               let $color = adjustQty[j].closest("article").dataset.color;
+
+               // Récupération de la quantité du champ écouté 
+               let $qty = parseInt(adjustQty[j].value);
+
+               // Filtre les articles par rapport à l'id et la couleur
+               let itemToAdjust = itemInCart.find(ad => ad.id === $id && ad.color === $color);
+
+               // Modification de la quantité par rapport à la saisie dans "Qté"
+               itemToAdjust.quantity = $qty;
 
                // Sauvegarde du panier modifié
                localStorage.setItem("cart", JSON.stringify(itemInCart));
-          }
-     })
+               
+               // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
+               location.reload();
+               })
+     }
 }
+
+// Création des expressions régulières
+let nameRegExp = RegExp("^[A-Za-z- a-z]{2,32}$");
+let cityRegExp = RegExp("^[A-Za-z-]{2,60}$")
+let addressRegExp = RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+let emailRegExp = RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,2}$");
 
 // Création d'une fonction gérant le formulaire
 function form() {
 
-     // Création des expressions régulières
-     let nameRegExp = RegExp("^[A-Za-z- a-z]{2,32}$");
-     let cityRegExp = RegExp("^[A-Za-z-]{2,60}$")
-     let addressRegExp = RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
-     let emailRegExp = RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,2}$");
-     
      // Ajout du formulaire
      let form = document.querySelector(".cart__order__form");
 
      // Ajout d'une écoute sur le champ du prénom
-     form.firstName.addEventListener('change', function() {
+     form.firstName.addEventListener('change', () => {
           validFirstName(form.firstName);
      });
  
@@ -164,7 +212,7 @@ function form() {
      });
  
      // validation du prénom
-     const validFirstName = function(inputFirstName) {
+     const validFirstName = (inputFirstName) => {
           let appendedMsg = inputFirstName.nextElementSibling;
  
           if (nameRegExp.test(inputFirstName.value)) {
