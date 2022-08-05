@@ -159,18 +159,42 @@ function adjustQuantity() {
                // Récupération de la quantité du champ écouté 
                let $qty = parseInt(adjustQty[j].value);
 
-               // Filtre les articles par rapport à l'id et la couleur
-               let itemToAdjust = itemInCart.find(ad => ad.id === $id && ad.color === $color);
+               // Création d'une expression régulière pour s'assurer une saisie numérique dans "Qté"
+               let quantityRegex = RegExp("^[0-9]{1,32}$");
 
-               // Modification de la quantité par rapport à la saisie dans "Qté"
-               itemToAdjust.quantity = $qty;
+               // Si le test de la RegExp échoue, injonction à l'utilisateur
+               if (!quantityRegex.test(adjustQty[j].value)) {
 
-               // Sauvegarde du panier modifié
-               localStorage.setItem("cart", JSON.stringify(itemInCart));
+                    alert("Veuillez saisir une quantité valide.")
                
-               // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
-               location.reload();
-               })
+               // Si la quantité saisie est 0, on demande à l'utilisateur s'il veut supprimer l'article. Si oui, on joue une version minifiée de la fonction removeFromCart
+               } else if (adjustQty[j].value == 0) {
+                    if (window.confirm("Voulez-vous retirer ce produit de votre panier?")) {
+
+                         // Conserve les produits ne correspondant pas à l'id et la couleur passées dans la méthode filter
+                         itemInCart = itemInCart.filter(it => it.id != $id || it.color != $color);
+     
+                         // Sauvegarde du panier modifié
+                         localStorage.setItem("cart", JSON.stringify(itemInCart));
+     
+                         // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
+                         location.reload();
+                    }
+               } else {
+
+                    // Filtre les articles par rapport à l'id et la couleur
+                    let itemToAdjust = itemInCart.find(ad => ad.id === $id && ad.color === $color);
+
+                    // Modification de la quantité par rapport à la saisie dans "Qté"
+                    itemToAdjust.quantity = $qty;
+
+                    // Sauvegarde du panier modifié
+                    localStorage.setItem("cart", JSON.stringify(itemInCart));
+
+                    // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
+                    location.reload();
+               }
+          })
      }
 }
 
