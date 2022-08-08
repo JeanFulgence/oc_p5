@@ -1,6 +1,10 @@
 // Récupération du contenu de l'API
 fetch("http://localhost:3000/api/products")
+
+// Renvoi des informations du produit
 .then(response => response.json())
+
+// Définition de l'objet products puis appel de la fonction d'affichage des produits
 .then((products) => {
 
      // Création d'un tableau avec les produits dans la console
