@@ -5,7 +5,7 @@ var itemInCart = JSON.parse(localStorage.getItem("cart"));
 console.table(itemInCart);
 
 // Fonction d'affichage des articles du panier
-async function displayCart(index) {
+function displayCart(index) {
      
      // Vérification de la présence d'article dans le panier
      if (!itemInCart || itemInCart.length == 0) {
@@ -35,7 +35,7 @@ async function displayCart(index) {
                     var quantity = itemInCart.quantity;
                     var price = article.price;
 
-                    // Insertion de la 
+                    // Insertion de la zone d'article
                     cartZone.innerHTML += `<article class="cart__item" data-id="${itemInCart.id}" data-color="${itemInCart.color}">
                     <div class="cart__item__img">
                               <img src="${article.imageUrl}" alt="${article.altTxt}">
@@ -114,27 +114,27 @@ function removeFromCart() {
      // Définition du bouton "supprimer"
      let deleteBtn = document.querySelectorAll(".deleteItem");
 
-          // Boucle itérant les occurences du bouton "supprimer"
-          for (let i = 0; i < deleteBtn.length; i++) {
+     // Boucle itérant les occurences du bouton "supprimer"
+     for (let i = 0; i < deleteBtn.length; i++) {
 
-               // Ajout d'une écoute sur le bouton "supprimer"
-               deleteBtn[i].addEventListener("click", () => {
-                    if (window.confirm("Voulez-vous retirer ce produit de votre panier?")) {
+          // Ajout d'une écoute sur le bouton "supprimer"
+          deleteBtn[i].addEventListener("click", () => {
+               if (window.confirm("Voulez-vous retirer ce produit de votre panier?")) {
                     
-                    // Récupération de l'id du produit sur lequel on clique via la propriété dataset associée à la méthode
-                    let $id = deleteBtn[i].closest("article").dataset.id;
+               // Récupération de l'id du produit sur lequel on clique via la propriété dataset associée à la méthode
+               let $id = deleteBtn[i].closest("article").dataset.id;
                     
-                    // Récupération de la couleur du produit sur lequel on clique via la propriété dataset associée à la méthode
-                    let $color = deleteBtn[i].closest("article").dataset.color;
+               // Récupération de la couleur du produit sur lequel on clique via la propriété dataset associée à la méthode
+               let $color = deleteBtn[i].closest("article").dataset.color;
 
-                    // Conserve les produits ne correspondant pas à l'id et la couleur passées dans la méthode filter
-                    itemInCart = itemInCart.filter(it => it.id != $id || it.color != $color);
+               // Conserve les produits ne correspondant pas à l'id et la couleur passées dans la méthode filter
+               itemInCart = itemInCart.filter(it => it.id != $id || it.color != $color);
 
-                    // Sauvegarde du panier modifié
-                    localStorage.setItem("cart", JSON.stringify(itemInCart));
+               // Sauvegarde du panier modifié
+               localStorage.setItem("cart", JSON.stringify(itemInCart));
 
-                    // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
-                    location.reload();
+               // Rechargement de la page afin de mettre à jour le panier pour l'utilisateur
+               location.reload();
                }
           })
      }
@@ -234,6 +234,8 @@ function order() {
  
      // validation du prénom
      let validFirstName = (inputFirstName) => {
+
+          // Récupération de la balise HTML du message d'erreur
           let appendedMsg = document.getElementById("firstNameErrorMsg");
  
           if (nameRegExp.test(inputFirstName.value)) {
@@ -251,6 +253,8 @@ function order() {
  
      // validation du nom
      let validLastName = (inputLastName) => {
+
+          // Récupération de la balise HTML du message d'erreur
           let appendedMsg = document.getElementById("lastNameErrorMsg");
  
           if (nameRegExp.test(inputLastName.value)) {
@@ -268,6 +272,8 @@ function order() {
  
      // validation de l'adresse
      let validAddress = (inputAddress) => {
+
+          // Récupération de la balise HTML du message d'erreur
           let appendedMsg = document.getElementById("addressErrorMsg");
  
           if (addressRegExp.test(inputAddress.value)) {
@@ -285,6 +291,8 @@ function order() {
  
      //validation de la ville
      let validCity = (inputCity) => {
+
+          // Récupération de la balise HTML du message d'erreur
           let appendedMsg = document.getElementById("cityErrorMsg");
  
           if (cityRegExp.test(inputCity.value)) {

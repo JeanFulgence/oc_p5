@@ -14,11 +14,11 @@ fetch("http://localhost:3000/api/products/" + idKanap)
 // Création d'un message d'erreur en cas d'échec de la récupération
 .catch(error => {
 
-            //Insertion d'un titre "Erreur 404"
-            document.getElementById("item").innerHTML = "<h1>Erreur 404</h1>"; 
+      //Insertion d'un titre "Erreur 404"
+      document.getElementById("item").innerHTML = "<h1>Erreur 404</h1>"; 
             
-            //Affichage de l'erreur dans la console
-            console.log("Erreur 404 sur ressource API:" + error)
+      //Affichage de l'erreur dans la console
+      console.log("Erreur 404 sur ressource API:" + error)
 }));
 
 // Fonction d'affichage du produit
@@ -42,13 +42,14 @@ function displayProduct(article) {
 
       // Récupération l'élément avec l'id colors et lui ajoute les couleurs associées
       for (let colors of article.colors) {
-          let articleColors = document.createElement("option");
-          document.querySelector("#colors").appendChild(articleColors);
-          articleColors.value = colors;
-          articleColors.innerHTML = colors;
+            let articleColors = document.createElement("option");
+            document.querySelector("#colors").appendChild(articleColors);
+            articleColors.value = colors;
+            articleColors.innerHTML = colors;
       }
       console.log("Article affiché.")
 
+      // Appel de la fonction d'ajout au panier
       addToCart(article)
 }
 
@@ -95,7 +96,7 @@ function addToCart(article) {
                   'quantity' : parseInt(selectedQuantity.value)
             };
 
-            // Déclaration d'une variable cherchant un produit dans le panier dont l'id est identique au produit que l'on veut ajouter
+            // Déclaration d'une variable cherchant dans le panier un produit dont l'id est identique au produit que l'on veut ajouter
             let foundItem = cart.find(fi => fi.id == article._id && fi.color == selectedColor.value);
 
             // Affichage d'un message si les valeur de couleur et de quantité ne sont pas définies correctement
